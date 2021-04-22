@@ -17,7 +17,8 @@ export class CreateGroup extends Component{
             value: [],
             groupCreated: false,
             error: "",
-            groupname: null
+            groupname: null,
+            usercreated: ""
             
             
         };
@@ -40,11 +41,12 @@ export class CreateGroup extends Component{
     }
 
     async getOptions() {
-        const res = await axios.get("http://localhost:3001/getuserlist/" + useremail)
+        const res = await axios.get("http://localhost:3001/api/getuserlist")
         const data = res.data
         console.log(res.data)
         let options = data.map(d => ({"value": d.email, "label": d.email}))
 
+        // let options = res.data;
         this.setState({emailList: options})
     }
 
@@ -54,12 +56,14 @@ export class CreateGroup extends Component{
         e.preventDefault();
         const data = {
             groupmemberemails: this.state.value,
-            groupname: this.state.groupname
+            groupname: this.state.groupname,
+            usercreated: useremail
         }
         console.log("useremail"+useremail)
-        axios.post('http://localhost:3001/creategroup/' + useremail, data).then(response => {
+        axios.post('http://localhost:3001/api/creategroup', data).then(response => {
             console.log("Status Code : ", response.status);
             console.log("Data Sent ", response.data);
+            console.log("member emails: ", data.groupmemberemails);
             if (response.status === 200) {
                 this.setState({groupCreated: true})
                 window.location.href ="http://localhost:3000/home"

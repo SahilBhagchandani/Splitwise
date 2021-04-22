@@ -7,6 +7,8 @@ import SignUp from './SignUp/SignUp'
 import dashboard from './Dashboard/dashboard';
 import createGroup from './CreateGroup/CreateGroup';
 import GroupPage from './GroupPage/GroupPage';
+import ProfilePage from './profilePage/profilePage';
+import Invitation from './Invitations/invitation'
 //Create a Main Component
 class Main extends Component {
     render(){
@@ -20,6 +22,8 @@ class Main extends Component {
                 <Route path="/signup" exact component={SignUp}/>
                 <Route path="/createGroup" exact component={createGroup}/>
                 <Route path="/GroupPage" exact component={GroupPage}/>
+                <Route path="/profilePage" component={ProfilePage}/>
+                <Route path="/invitation" component={Invitation}/>
                 
             </div>
         )

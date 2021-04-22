@@ -12,7 +12,27 @@ let userSchema = new Schema({
    password: {
       type: String,
       required: true
-   }
+   },
+   phonenumber: {
+      type: Number,
+      required: false,
+      default: null
+   },
+   currency: {
+      type: String,
+      required: false,
+      default: "USD",
+   },
+   language: {
+      type: String,
+      default: "English"
+   },
+   profileImg: {
+      type: String
+   },
+
+   groupPartOf: [{type: String, ref: "Groups"}],
+   groupInvitedTo: [{type: String, ref: "Groups"}]
 },{
    timestamps: true,
    collection: 'users'

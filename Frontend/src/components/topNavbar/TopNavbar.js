@@ -37,12 +37,28 @@ export default class topNavbar extends Component {
             </h2>
           </li>
           <li className="topnavbar-li">
+            <Link to="/profilePage">
+              <button
+                class="btn btn-lg"
+                style={{
+                    marginLeft: "1200px",
+                    marginTop: "2em",
+                  backgroundColor: "#48be9d",
+                  color: "#ffffff",
+                }}
+              >
+                Profile
+              </button>
+            </Link>
+          </li>
+          <li className="topnavbar-li">
             <Link to="/">
               <button onClick={this.handleLogout}
                 class="btn pull-right landingbtn btn-lg"
                 style={{
-                    marginLeft: "1200px",
+                    marginLeft: "10px",
                     marginTop: "2em",
+                    marginBottom: "2em",
                   backgroundColor: "#48be9d",
                   color: "#ffffff",
                 }}
@@ -51,7 +67,10 @@ export default class topNavbar extends Component {
               </button>
             </Link>
           </li>
+
+
         </ul>
+        
       </div>
     );
   }

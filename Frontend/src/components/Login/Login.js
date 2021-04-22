@@ -99,7 +99,10 @@ class Login extends Component {
     let redirectVar = null;
         if (this.state.token.length > 0) {
             localStorage.setItem("token", this.state.token);
+            localStorage.setItem("email", this.state.email);
             console.log("token: ", this.state.token);
+            console.log("email: ", this.state.email);
+            
             
             redirectVar = <Redirect to="/home" />;
         }

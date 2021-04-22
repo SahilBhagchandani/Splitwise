@@ -9,6 +9,7 @@ var bcrypt = require("bcrypt")
 var mysql = require('mysql')
 var mongoose = require('mongoose')
 const authRoutes = require('./router/auth');
+const fileRoutes = require("./router/auth");
 app.set("view engine", "ejs");
 
 //use cors to allow cross origin resource sharing
@@ -37,6 +38,8 @@ const connectDB = () =>{
   console.log('db connected');
 };
 connectDB();
+app.use("/upload", fileRoutes);
+
 
 
 // var con = mysql.createConnection({

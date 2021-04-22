@@ -1,4 +1,7 @@
 const User = require('../models/users');
+const Group = require('../models/groupPage')
+
+
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const { createJWT } = require("../utils/auth");
@@ -96,3 +99,143 @@ decoded) => {
       console.log("error here 3");
    });
 }
+
+exports.creategroup = (req, res) =>{
+   // let groupmemberemails = [];
+   let groupmemberemails =  req.body.groupmemberemails[0];
+   let groupname = req.body.groupname;
+   let usercreated = req.body.usercreated;
+
+   
+
+   console.log("groupmember emails:", groupmemberemails)
+   console.log("group name:", groupname)
+
+   var result= [];
+
+   for (var i = 0; i < groupmemberemails.length; i++) {
+      result[i] = groupmemberemails[i].value
+  }
+  result.push(req.params.useremail)
+  console.log(result)
+
+  const group = new Group({
+   groupname: groupname,
+   created_by: usercreated,
+   members: result
+})
+
+
+//   for (let i = 0; i < result.length; i++) {
+      
+//    }
+   group.save()
+   .then(response => {
+      res.status(200).json({
+        success: true,
+        result: response
+      })
+   })
+   .catch(err => {
+      console.log("here")
+     res.status(500).json({
+        errors: [{ error: err }]
+        
+     });
+  });
+
+//   const user = new User({
+//      groupInvitedTo: groupname
+
+//   })
+
+//   user.save()
+//    .then(response => {
+//       res.status(200).json({
+//         success: true,
+//         result: response
+//       })
+//    })
+//    .catch(err => {
+//       console.log("here 2")
+//      res.status(500).json({
+//         errors: [{ error: err }]
+//      });
+//   });
+
+
+}
+
+exports.getuserlist = (req, res) =>{
+   User.find({}, function(err, users) { 
+
+      var userMap = {}; 
+      console.log("this is: ",users)
+      
+      users.forEach(function(user) { 
+      
+      userMap[user.email] = user
+      
+      }); 
+      console.log(userMap)
+      res.send(users); 
+      
+      
+      }); 
+
+}
+
+exports.getinvitation= (req, res) =>{
+
+   let useremail =  req.body.user;
+   console.log("em: ", useremail)
+
+   // Group.find(
+   //    { inviteMembers: { $elemMatch : [useremail]}},
+   //    inviteMembers: { $elemMatch : [useremail]}}).then(Group =>
+   //       {
+
+   //       })
+
+
+      // Group.findOne({"friends.email": email}, 
+      //        {projection: { friends: { $elemMatch: { email: email } } } },
+      //        function(errT, resultT) {...});
+   
+
+   // Group.find({$elemmatch:{"members": useremail }})
+   
+   // Group.find().in("members", useremail)
+   
+   
+   Group.findOne({
+      $expr: {
+        $in: [useremail, "$members"]
+      }
+    }).then( group =>{
+      if(!group){
+
+         console.log("1")
+   
+
+      }else{
+
+         console.log("2")
+
+      }
+   })
+
+
+   // Group.find({use:useremail}).then( group =>{
+   //    if(!group){
+   //       console.log("1")
+
+   //    }else{
+   //       console.log("2")
+
+   //    }
+   // })
+
+
+}
+

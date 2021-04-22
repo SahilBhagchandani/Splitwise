@@ -62,6 +62,9 @@ export class LeftNavbar extends Component {
             <li>
               <Link to='/createGroup'><a>Create Group</a></Link>
             </li>
+            <li>
+              <Link to='/invitation'><a>View Invitation</a></Link>
+            </li>
           </ul>
           
         </div>
