@@ -11,16 +11,23 @@ const unlinkFile = util.promisify(fs.unlink);
 const {uploadFile,getFileStream} = require("../services/file-upload")
 
 
-const { signup, login, creategroup, getuserlist, getinvitation } = require('../controller/auth');
+const { signup, login, creategroup, getuserlist, getinvitation, inviteaccepted, invitedeclined, grouppartof, billdetails, getbilldetails, groupmembers, youareowed } = require('../controller/auth');
 // const { imageupload }= require('../controller/auth');
 
 
 
 router.post('/signup', signup);
 router.post('/login', login);
-router.post('/creategroup', creategroup )
-router.get('/getuserlist', getuserlist)
-router.post('/getInvitation', getinvitation)
+router.post('/creategroup', creategroup );
+router.get('/getuserlist', getuserlist);
+router.post('/getInvitation', getinvitation);
+router.post('/inviteaccepted', inviteaccepted);
+router.post('/invitedeclined', invitedeclined);
+router.post('/grouplist', grouppartof);
+router.post('/billdetails', billdetails);
+router.post('/getbilldetails', getbilldetails);
+router.post('/groupmembers', groupmembers);
+router.post('/youareowed', youareowed);
 // router.get('/imageupload', imageupload)
 
 

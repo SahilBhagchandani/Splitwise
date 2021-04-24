@@ -6,8 +6,7 @@ import Modal from "react-bootstrap/Modal";
 import { Button, Form, FormControl, ControlLabel } from "react-bootstrap";
 import TopNavbar from "../topNavbar/TopNavbar";
 import LeftNavbar from "../leftNavbar/LeftNavbar";
-
-
+import backendServer from "../../webConfig";
 export class GroupPage extends Component {
   constructor(props) {
     super(props);
@@ -18,7 +17,8 @@ export class GroupPage extends Component {
       expensedescription: "",
       amount: "",
       bill: false,
-      billshow: []
+      billshow: [],
+      email: ""
     };
     this.handleModalOpen = this.handleModalOpen.bind(this);
     this.handleModalClose = this.handleModalClose.bind(this);
@@ -56,16 +56,18 @@ handleAmount = (e) => {
       expensedescription: this.state.expensedescription,
       amount: this.state.amount
     };
+  
     axios
-      .get("http://localhost:3001/GroupPage/" + this.state.groupname, info)
+      .post(`${backendServer}/groupmembers`, info)
       .then((response) => {
+        console.log(response.data[0].members)
         this.setState({
-          membersList: this.state.membersList.concat(response.data)
+          membersList: response.data[0].members
         });
       });
     console.log(this.state.membersList);
 
-    axios.post("http://localhost:3001/getbilldetails", info).then((response)=>{
+    axios.post(`${backendServer}/getbilldetails`, info).then((response)=>{
         this.setState({
             billshow: this.state.billshow.concat(response.data)
         })
@@ -78,9 +80,10 @@ handleAmount = (e) => {
     const info = {
         groupname: this.state.groupname,
         expensedescription: this.state.expensedescription,
-        amount: this.state.amount
+        amount: this.state.amount,
+        email: localStorage.getItem("email")
       };
-    axios.post("http://localhost:3001/billdetails", info).then((response)=>{
+    axios.post(`${backendServer}/billdetails`, info).then((response)=>{
 
         console.log("Status Code : ", response.status);
         console.log("Data Sent ", response.info);
@@ -92,12 +95,14 @@ handleAmount = (e) => {
         }
     });
 
-    axios.post("http://localhost:3001/getbilldetails", info).then((response)=>{
-        this.setState({
-            billshow: this.state.billshow.concat(response.data)
-        })
+    // axios.post(`${backendServer}/getbilldetails`, info).then((response)=>{
+    //     this.setState({
+    //         billshow: this.state.billshow.concat(response.data)
+    //     })
 
-    });
+    // });
+
+    window.location.reload()
     this.setState({
         show: false
     })
@@ -109,11 +114,13 @@ handleAmount = (e) => {
     const {
         groupname, expensedescription, amount
     }= this.state
+
+    console.log("cccc: ",this.state.groupname)
     let details = this.state.membersList.map((membersLists) => {
       return (
         <div className="leftNavbarmain">
         <ul className="leftnavlist">
-          <li>{membersLists.email}</li>
+          <li>{membersLists}</li>
         </ul>
         </div>
       );
@@ -123,8 +130,8 @@ handleAmount = (e) => {
         return(
           <div className="leftNavbarmain">
             <ul className="leftnavlist" style={{marginLeft: "300px"}}>
-                <li><b>Description: </b>{billshows.description}</li>
-                <li><b>Total amount: </b>{billshows.total_amount}$</li>
+                <li><b>Description: </b>{billshows.bill_desc}</li>
+                <li><b>Total amount: </b>{billshows.bill_amount}$</li>
             </ul>
             </div>
         )

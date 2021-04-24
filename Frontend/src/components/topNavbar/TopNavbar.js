@@ -14,8 +14,10 @@ export default class topNavbar extends Component {
   handleLogout = () =>{
     console.log("hello1")
 
+    localStorage.removeItem('email')
     localStorage.clear();
     console.log("token:", localStorage.getItem('token'))
+    console.log("email:", localStorage.getItem('email'))
   };
   render() {
     let redirectVar = null;

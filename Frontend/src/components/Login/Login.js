@@ -29,9 +29,14 @@ class Login extends Component {
     this.submitLogin = this.submitLogin.bind(this);
   }
   componentWillMount() {
+    localStorage.setItem('token', this.state.token);
+    localStorage.setItem('email', this.state.email);
     this.setState({
       authFlag: false,
     });
+  }
+  componentDidMount(){
+    localStorage.clear()
   }
 
   usernameChangeHandler = (e) => {
@@ -66,8 +71,9 @@ class Login extends Component {
       .then((response) => {
         console.log("Status Code : ", response.status);
         localStorage.setItem('email', data.email)
+
         let em = localStorage.getItem('email')
-        console.log(em)
+        console.log("lol: ",em)
 
         if (response.status === 200) {
           this.setState({
@@ -98,8 +104,8 @@ class Login extends Component {
     console.log("token: ", this.state.token.length);
     let redirectVar = null;
         if (this.state.token.length > 0) {
-            localStorage.setItem("token", this.state.token);
-            localStorage.setItem("email", this.state.email);
+            localStorage.setItem('token', this.state.token);
+            localStorage.setItem('email', this.state.email);
             console.log("token: ", this.state.token);
             console.log("email: ", this.state.email);
             

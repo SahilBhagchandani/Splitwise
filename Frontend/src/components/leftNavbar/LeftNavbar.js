@@ -2,8 +2,9 @@ import React, { Component } from "react";
 import {Link} from 'react-router-dom';
 import axios from "axios";
 import './LeftNavbar.css';
+import backendServer from "../../webConfig";
 
-var useremail = localStorage.getItem('user');
+var useremail = localStorage.getItem('email');
 
 export class LeftNavbar extends Component {
     constructor(props){
@@ -24,26 +25,51 @@ export class LeftNavbar extends Component {
     // }
 
     componentDidMount(){
-        axios.get("http://localhost:3001/usergroup/" + useremail).
+      const data ={
+        useremail : useremail
+      }
+      console.log("hello", data.useremail)
+         axios.post(`${backendServer}/grouplist`, data).
         then((response) =>{
+            // this.setState({
+            //     groupList : this.state.groupList.concat(response.data)
+
+            // });
+            console.log("hhh",response.data[0].groupPartOf.length)
+            if(response.data[0].groupPartOf.length === 0)
+            {
+
+            }
+            else{
             this.setState({
-                groupList : this.state.groupList.concat(response.data)
+              groupList: response.data[0].groupPartOf
 
             });
+        
+          
+          }
         });
+        
     
     }
+
+    
+  
   render() {
+    
 
     let details = this.state.groupList.map(groupLists => {
         return(
             
             <tr>
-                <Link to ={`/GroupPage/${groupLists.group_name}`}><a><td>{groupLists.group_name}</td></a></Link>
+                <Link to ={`/GroupPage/${groupLists}`}><a><td>{groupLists}</td></a></Link>
             </tr>
         
         )
     })
+    console.log(this.state.groupList)
+    
+    
     return (
       <div>
         <div className="leftNavbarmain">

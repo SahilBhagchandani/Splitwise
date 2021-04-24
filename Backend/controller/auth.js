@@ -1,5 +1,6 @@
 const User = require('../models/users');
 const Group = require('../models/groupPage')
+const Bill = require('../models/bill');
 
 
 const jwt = require('jsonwebtoken');
@@ -122,7 +123,7 @@ exports.creategroup = (req, res) =>{
   const group = new Group({
    groupname: groupname,
    created_by: usercreated,
-   members: result
+   inviteMembers: result
 })
 
 
@@ -189,6 +190,7 @@ exports.getinvitation= (req, res) =>{
 
    let useremail =  req.body.user;
    console.log("em: ", useremail)
+   let groupnamearray = [];
 
    // Group.find(
    //    { inviteMembers: { $elemMatch : [useremail]}},
@@ -208,19 +210,32 @@ exports.getinvitation= (req, res) =>{
    // Group.find().in("members", useremail)
    
    
-   Group.findOne({
+   Group.find({
       $expr: {
-        $in: [useremail, "$members"]
+        $in: [useremail, "$inviteMembers"]
       }
     }).then( group =>{
       if(!group){
 
-         console.log("1")
+         console.log("1");
+         console.log(group);
    
 
       }else{
 
          console.log("2")
+         console.log(group)
+         for(i=0 ; i< group.length ; i++){
+            console.log(group[i].groupname);
+            groupnamearray.push(group[i].groupname);
+
+         }
+         console.log(groupnamearray);
+         res.send(group);
+         // res.status(200).json({
+         //    success: true,
+         //    result: groupnamearray
+         // })
 
       }
    })
@@ -236,6 +251,236 @@ exports.getinvitation= (req, res) =>{
    //    }
    // })
 
+
+}
+
+exports.inviteaccepted= (req, res) =>{
+   let useremail = req.body.user
+   let userID = req.body.objectid
+   console.log(useremail)
+   console.log(userID)
+
+//    Group.findByIdAndUpdate(userID,
+//       {$pull: {'inviteMembers': useremail}}
+//   )
+
+  Group.findOneAndUpdate( 
+     {'_id' : userID} ,
+  {
+    $pull: {'inviteMembers': useremail }
+  }
+  , function(error, result){
+     if(error){
+
+      // console.log(error)
+     }
+     else{
+
+      console.log("cdkcnd: ",result.groupname);
+      User.findOneAndUpdate( 
+         {'email' : useremail} ,
+      {
+        $push: {'groupPartOf': result.groupname}
+      }
+      , function(err, re){
+         if(error){
+    
+         //  console.log(err)
+         }
+         else{
+    
+          console.log("hello")
+    
+         }
+      }
+      )
+
+
+
+
+
+
+
+      Group.findOneAndUpdate( 
+         {'_id' : userID} ,
+      {
+        $push: {'members': useremail }
+      }
+      , function(err, re){
+         if(error){
+    
+         //  console.log(err)
+         }
+         else{
+    
+         //  console.log(res)
+    
+         }
+      }
+      )
+
+     }
+  }
+  )
+}
+
+exports.invitedeclined= (req, res) =>{
+   let useremail = req.body.user
+   let userID = req.body.objectid
+   console.log(useremail)
+   console.log(userID)
+
+//    Group.findByIdAndUpdate(userID,
+//       {$pull: {'inviteMembers': useremail}}
+//   )
+
+  Group.findOneAndUpdate( 
+     {'_id' : userID} ,
+  {
+    $pull: {'inviteMembers': useremail }
+  }
+  , function(error, result){
+     if(error){
+
+      console.log(error)
+     }
+     else{
+
+     
+     }
+  }
+  )
+}
+
+exports.grouppartof= (req, res) =>{
+   let user = req.body.useremail
+   console.log("jjj: ", user)
+   User.find({email: user}, function(err, users) { 
+
+      // var userMap = {}; 
+      // console.log("this is: ",users)
+      
+      // users.forEach(function(user) { 
+      
+      // userMap[user.email] = user
+      
+      // }); 
+      // console.log(userMap)
+      res.send(users); 
+      
+      
+      }); 
+}
+
+exports.billdetails =(req, res)=>{
+   let groupname = req.body.groupname
+   let billDesc =  req.body.expensedescription
+   let amount = req.body.amount
+   let email = req.body.email
+   console.log(groupname,", ", billDesc, ",", amount, email)
+
+   const bill= new Bill({
+      bill_desc: billDesc,
+      created_in: groupname,
+      bill_amount: amount,
+      created_by: email
+   })
+   bill.save()
+   .then(response => {
+      res.status(200).json({
+        success: true,
+        result: response
+      })
+   })
+
+
+}
+
+exports.getbilldetails= (req, res)=>{
+   let groupname = req.body.groupname
+
+   Bill.find({created_in: groupname}, function(error, results){
+      if(error){
+         console.log(error)
+      }
+      else{
+         console.log(results)
+         res.send(results)
+      }
+
+   });
+
+}
+
+exports.groupmembers= (req, res)=>{
+   let groupname = req.body.groupname
+   
+   Group.find({groupname: groupname}, function(error, results){
+      if(error){
+         console.log(error)
+      }else{
+         res.send(results)
+         console.log("helloccc")
+      }
+
+   });
+   
+}
+
+exports.youareowed =(req, res)=>{
+   let email = req.body.email;
+   let billgroup = "";
+   var splitbill= 0;
+   let splitbillList = []
+   console.log("gbgbgb", email);
+
+   Bill.find({created_by: email}, function(error, results){
+      if(error){
+         console.log(error)
+      }else{
+         console.log("ckii,", results.length)
+         console.log("yoloo: ", results[2].created_in)
+         console.log("kkyudc: ", results[2].bill_amount)
+
+         for(let i =0; i< results.length; i++){
+            Group.find({groupname: results[i].created_in}, function(error, groupresults){
+               if(error){
+                  console.log(error)
+               }else{
+                  console.log(groupresults)
+                  console.log("fu",groupresults[0].members.length)
+
+                  console.log("helloccc")
+                  splitbill = results[i].bill_amount/groupresults[0].members.length
+                  console.log("split:", splitbill)
+                  splitbillList= splitbillList.concat(splitbill)
+
+
+               }
+         
+            });
+
+
+         }
+         console.log("lolLL", splitbillList)
+      }
+
+   });
+
+  
+   // Group.find({
+   //    $expr: {
+   //      $in: [useremail, "Members"]
+   //    }, function(error, results){
+   //       if(error){
+   //          console.log(error)
+   //       }else{
+   //          res.send(results)
+   //          console.log("helloccc")
+   //       }
+   
+   //    }
+   //  });
 
 }
 

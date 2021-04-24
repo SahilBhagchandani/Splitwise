@@ -6,11 +6,17 @@ import { Redirect } from "react-router";
 import Navbar from "../Navbar/Navbar";
 import LeftNavbar from "../leftNavbar/LeftNavbar";
 import TopNavbar from "../topNavbar/TopNavbar";
+import {Table} from "react-bootstrap";
+import backendServer from "../../webConfig";
 
+
+var useremail= localStorage.getItem('email')
 class dashboard extends Component {
   constructor() {
     super();
-    this.state = {};
+    this.state = {
+      email: useremail
+    };
   }
 
   componentDidMount() {
@@ -18,6 +24,27 @@ class dashboard extends Component {
       //update the state with the response data
       this.setState({});
     });
+
+    const data ={
+      email: useremail
+
+    }
+
+    axios.post(`${backendServer}/youareowed`, data)
+    .then((response) => {
+    //   let data = response.data;
+    //   console.log("ddd", data)
+    //   console.log("ggg", response.data)
+    //  let options = data.map(d => ({"value": d._id}))
+
+    //  // let options = res.data;
+    //  this.setState({groupId: options})
+    //  this.setState({
+    //    groupinvitedlist: this.state.groupinvitedlist.concat(response.data)
+
+    //  })
+     
+     });
   }
 
   render() {
@@ -42,13 +69,25 @@ class dashboard extends Component {
         </div>
         <div>
           <LeftNavbar />
-          <table class="table">
-                <tr>
-                    <td>total balance</td>
-                    <td>total balance</td>
-                    <td>total balance</td>
-                </tr>
-            </table>
+
+            <Table striped bordered hover>
+  <thead>
+    <tr>
+      <th>Total Balance</th>
+      <th>You owe</th>
+      <th>You are owed</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td>Mark</td>
+      <td>Otto</td>
+      <td>@mdo</td>
+    </tr>
+    
+  </tbody>
+</Table>
         </div>
         <div>
             
