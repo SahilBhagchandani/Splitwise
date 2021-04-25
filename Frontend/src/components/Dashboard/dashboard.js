@@ -15,15 +15,18 @@ class dashboard extends Component {
   constructor() {
     super();
     this.state = {
-      email: useremail
+      email: useremail,
+      othermember: [],
+      money: [],
+      billareowed: 0
     };
   }
 
   componentDidMount() {
-    axios.get("http://localhost:3001/home").then((response) => {
-      //update the state with the response data
-      this.setState({});
-    });
+    // axios.get("http://localhost:3001/home").then((response) => {
+    //   //update the state with the response data
+    //   this.setState({});
+    // });
 
     const data ={
       email: useremail
@@ -32,6 +35,41 @@ class dashboard extends Component {
 
     axios.post(`${backendServer}/youareowed`, data)
     .then((response) => {
+      
+      // for(let i =0; i< response.data.length; i++){
+
+      //   console.log(response.data[i].moneyowe)
+      //   this.setState=({
+      //     othermember: this.state.othermember.concat(response.data[i].moneyowe)
+      //   })
+
+      // }
+      for(let i =0; i< response.data.length; i++){
+
+        
+        console.log(response.data[i].members)
+        
+        // this.setState({
+
+        //   billareowed:
+          
+        // })
+
+
+      }
+      this.setState({
+        othermember: response.data
+      });
+      var temp = 0;
+      temp= response.data.length-1;
+      console.log(this.state.othermember)
+      console.log("ss",response.data[temp].totalbill)
+      this.setState({
+        billareowed: response.data[temp].totalbill
+      })
+
+      
+      
     //   let data = response.data;
     //   console.log("ddd", data)
     //   console.log("ggg", response.data)
@@ -50,7 +88,28 @@ class dashboard extends Component {
   render() {
     //iterate over books to create a table row
     //if not logged in go to login page
+    console.log("lol",this.state.othermember)
+
+    let details = this.state.othermember.map((othermembers) => {
+      return (
+        <div className="leftNavbarmain">
+        <ul className="leftnavlist">
+          <li>{othermembers.members+ ","} owes you {othermembers.moneyowe} in group {othermembers.groupname} for {othermembers.billdesc}</li>
+        </ul>
+        </div>
+      );
+    });
+    let details2 = this.state.othermember.map((othermembers) => {
+      return (
+        <div className="leftNavbarmain">
+        <ul className="leftnavlist">
+          <li>{othermembers.totalbill}</li>
+        </ul>
+        </div>
+      );
+    });
     
+    console.log("lolll,", this.state.othermember)
     let redirectVar = null;
         if(localStorage.getItem('token')){
           console.log("fff")
@@ -73,23 +132,26 @@ class dashboard extends Component {
             <Table striped bordered hover>
   <thead>
     <tr>
-      <th>Total Balance</th>
       <th>You owe</th>
-      <th>You are owed</th>
+      <th>You are owed<br></br>
+      {this.state.billareowed}
+      </th>
     </tr>
   </thead>
   <tbody>
-    <tr>
-      <td>1</td>
+
+  <tr>
       <td>Mark</td>
-      <td>Otto</td>
-      <td>@mdo</td>
+      <td>{details}</td>
     </tr>
+
     
   </tbody>
 </Table>
         </div>
         <div>
+
+
             
         </div>
       </div>

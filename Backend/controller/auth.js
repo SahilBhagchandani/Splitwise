@@ -429,10 +429,12 @@ exports.groupmembers= (req, res)=>{
 
 exports.youareowed =(req, res)=>{
    let email = req.body.email;
-   let billgroup = "";
+   let billgroup = [];
    var splitbill= 0;
    let splitbillList = []
+   var totalbill = 0;
    console.log("gbgbgb", email);
+   var list= []
 
    Bill.find({created_by: email}, function(error, results){
       if(error){
@@ -441,6 +443,7 @@ exports.youareowed =(req, res)=>{
          console.log("ckii,", results.length)
          console.log("yoloo: ", results[2].created_in)
          console.log("kkyudc: ", results[2].bill_amount)
+         var length= results.length-1
 
          for(let i =0; i< results.length; i++){
             Group.find({groupname: results[i].created_in}, function(error, groupresults){
@@ -449,21 +452,48 @@ exports.youareowed =(req, res)=>{
                }else{
                   console.log(groupresults)
                   console.log("fu",groupresults[0].members.length)
+                  billgroup = groupresults[0].members
+                  let newarray = billgroup.filter(element => element !== email);
+
+                  console.log("ck",billgroup)
+                  console.log("cc", newarray)
 
                   console.log("helloccc")
                   splitbill = results[i].bill_amount/groupresults[0].members.length
+                  totalbill += splitbill;
                   console.log("split:", splitbill)
                   splitbillList= splitbillList.concat(splitbill)
+                  var finaldata2 ={
+                     moneyowe: splitbill,
+                     members: newarray,
+                     groupname : results[i].created_in,
+                     billdesc: results[i].bill_desc,
+                     totalbill: totalbill
+                  }
+                  list.push(finaldata2)
+                  
+                  if(i == length){
+                     console.log("final3", list)
+                     res.send(list)
+                    
+
+                  }
+                  
 
 
                }
+
          
             });
 
+            
 
          }
-         console.log("lolLL", splitbillList)
+         console.log("final1",list)
+         
+         
       }
+      console.log("final2",list)
 
    });
 
