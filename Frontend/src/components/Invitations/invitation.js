@@ -2,6 +2,15 @@ import React, { Component } from "react";
 import axios from "axios";
 import {Card, Button} from "react-bootstrap";
 import backendServer from "../../webConfig";
+import LeftNavbar from "../leftNavbar/LeftNavbar";
+import TopNavbar from "../topNavbar/TopNavbar";
+import {img} from "../Navbar/logo.png"
+
+
+var ToggleDisplay = require('react-toggle-display');
+
+
+
 
 
 var useremail = localStorage.getItem('email');
@@ -39,6 +48,9 @@ export default class invitaion extends Component {
         userid : user
         }
        axios.post(`${backendServer}/inviteaccepted`, data)
+       
+       
+       
 
      }
 
@@ -98,15 +110,14 @@ export default class invitaion extends Component {
           //  </div>
           //  </div>
 
-          <Card style={{ width: '18rem' }}>
-  <Card.Img variant="top" src="holder.js/100px180" />
+          <Card style={{ width: '35rem' }}>
   <Card.Body>
-    <Card.Title>Card Title</Card.Title>
+    <Card.Title>Invites</Card.Title>
     <Card.Text>
       {book.created_by} has invited you to join {book.groupname}
     </Card.Text>
     <Button onClick={this.inviteAccepted} variant="primary" value={book._id}>Accept</Button>
-    <Button variant="primary" onClick={this.inviteDeclined} value={book._id}>Decline</Button>
+    <Button variant="primary" onClick={this.inviteDeclined} value={book._id} style={{marginLeft: "5px"}}>Decline</Button>
   </Card.Body>
 </Card>
 
@@ -114,19 +125,19 @@ export default class invitaion extends Component {
     })
     return (
       <div>
+         <div>
+          <TopNavbar/>
+      </div>
+      <div class="container">
+        <div class="row">
+        <div class="col" style={{width: "200px"}}>
+        <LeftNavbar/>
+        </div>
+        <div class="col" style={{width: "700px"}}>
         {invitation}
-        {/* <Card>
-          <Card.Header>Featured</Card.Header>
-          <Card.Body>
-            <Card.Title>Special title treatment</Card.Title>
-            <Card.Text>
-              With supporting text below as a natural lead-in to additional
-              content.
-            </Card.Text>
-            <Button variant="primary">Go somewhere</Button>
-            <Button variant="primary">Go somewhere</Button>
-          </Card.Body>
-        </Card> */}
+        </div>
+        </div>
+         </div>
       </div>
     );
   }

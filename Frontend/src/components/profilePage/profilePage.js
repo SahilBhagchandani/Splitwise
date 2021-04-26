@@ -116,6 +116,8 @@ import { Button, Form, FormControl, ControlLabel } from "react-bootstrap";
 import backendServer from "../../webConfig";
 import defaultpic from "./profilepic.jpg";
 import './profilePage.css';
+import LeftNavbar from "../leftNavbar/LeftNavbar";
+import TopNavbar from "../topNavbar/TopNavbar";
 
 localStorage.setItem('username', "Sahil")
 
@@ -130,7 +132,7 @@ export default class profilePage extends Component {
         username:username,
         // selectedFile: '',
         selectedFile: defaultpic,
-        amazonurl:'https://splitwiselab2.s3.us-east-2.amazonaws.com/df509c0992ce79fb787f038511b7f102.jpg'
+        amazonurl: ""
     }
     // this.onFileChange=this.onFileChange.bind(this)
     this.onSubmit=this.onSubmit.bind(this)
@@ -208,12 +210,19 @@ onSubmit=(e, file)=> {
     
     render() {
         return (
-          
+            <div>
+
+            <div>
+                <TopNavbar/>
+            </div>
+            <div class="container">
+                <div class="row">
+            <div class="col">
+                <LeftNavbar/>
+            </div>
+          <div class="col">
            <center>
                 <div><h2>YOUR ACCOUNT</h2></div>
-                <br></br>
-                <div><h5>Your name:</h5></div>
-                {this.state.username}
                 <br></br>
                 <br></br>
                 <div><h5>Your email id:</h5>
@@ -225,19 +234,26 @@ onSubmit=(e, file)=> {
                         <div className="form-group">
                             <input type="file" id="file" accept=".png, .jpg, .jpeg"  onChange={this.imageHandler} />
                         </div>
+                        <div className="form-group">
+                            <button className="btn btn-primary" type="button" onClick={(e) => { this.onSubmit(e, this.state.selectedFile)  }}>Upload</button>
+                        </div>
                         <div className="img-holder">
                         {console.log(this.state.selectedFile)}
                         <img src={this.state.amazonurl} alt="" id="img" className="img" />
                     </div>
-                        <div className="form-group">
-                            <button className="btn btn-primary" type="button" onClick={(e) => { this.onSubmit(e, this.state.selectedFile)  }}>Upload</button>
-                        </div>
+
                     
                 </div>
                 </div>
                 
                 
                 </center>
+                </div>
+                </div>
+                </div>
+                </div>
+
+
 
                 
               

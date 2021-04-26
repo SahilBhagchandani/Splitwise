@@ -28,7 +28,8 @@ let userSchema = new Schema({
       default: "English"
    },
    profileImg: {
-      type: String
+      type: String,
+      default: 'https://splitwiselab2.s3.us-east-2.amazonaws.com/df509c0992ce79fb787f038511b7f102.jpg'
    },
 
    groupPartOf: [{type: String, ref: "Groups"}],

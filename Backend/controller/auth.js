@@ -441,8 +441,8 @@ exports.youareowed =(req, res)=>{
          console.log(error)
       }else{
          console.log("ckii,", results.length)
-         console.log("yoloo: ", results[2].created_in)
-         console.log("kkyudc: ", results[2].bill_amount)
+         // console.log("yoloo: ", results[2].created_in)
+         // console.log("kkyudc: ", results[2].bill_amount)
          var length= results.length-1
 
          for(let i =0; i< results.length; i++){

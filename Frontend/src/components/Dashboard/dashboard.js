@@ -141,7 +141,7 @@ class dashboard extends Component {
   <tbody>
 
   <tr>
-      <td>Mark</td>
+      <td></td>
       <td>{details}</td>
     </tr>
 
