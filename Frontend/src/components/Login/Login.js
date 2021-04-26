@@ -7,6 +7,7 @@ import { loginUser } from "../../js/actions/types";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import Navbar from '../Navbar/Navbar';
+import backendServer from "../../webConfig"
 const jwt_decode = require('jwt-decode');
 
 
@@ -67,7 +68,7 @@ class Login extends Component {
     axios.defaults.withCredentials = true;
 
     axios
-      .post("http://localhost:3001/api/login", data)
+      .post(`${backendServer}/login`, data)
       .then((response) => {
         console.log("Status Code : ", response.status);
         localStorage.setItem('email', data.email)

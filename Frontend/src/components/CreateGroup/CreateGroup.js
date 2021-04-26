@@ -5,6 +5,7 @@ import { Redirect } from 'react-router'
 import './CreateGroup.css'
 import LeftNavbar from "../leftNavbar/LeftNavbar";
 import TopNavbar from "../topNavbar/TopNavbar";
+import backendServer from "../../webConfig"
 
 var useremail = localStorage.getItem('email');
 export class CreateGroup extends Component{
@@ -41,7 +42,7 @@ export class CreateGroup extends Component{
     }
 
     async getOptions() {
-        const res = await axios.get("http://localhost:3001/api/getuserlist")
+        const res = await axios.get(`${backendServer}/getuserlist`)
         const data = res.data
         console.log(res.data)
         let options = data.map(d => ({"value": d.email, "label": d.email}))
@@ -60,13 +61,13 @@ export class CreateGroup extends Component{
             usercreated: useremail
         }
         console.log("useremail"+useremail)
-        axios.post('http://localhost:3001/api/creategroup', data).then(response => {
+        axios.post(`${backendServer}/creategroup`, data).then(response => {
             console.log("Status Code : ", response.status);
             console.log("Data Sent ", response.data);
             console.log("member emails: ", data.groupmemberemails);
             if (response.status === 200) {
                 this.setState({groupCreated: true})
-                window.location.href ="http://localhost:3000/home"
+                window.location.href ="/home"
             } else if (response.status === 202) {
                 this.setState({groupCreated: false, error: response.data})
 

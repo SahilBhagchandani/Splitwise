@@ -35,7 +35,7 @@ export class LeftNavbar extends Component {
             //     groupList : this.state.groupList.concat(response.data)
 
             // });
-            console.log("hhh",response.data[0].groupPartOf.length)
+            // console.log("hhh",response.data[0].groupPartOf.length)
             if(response.data[0].groupPartOf.length === 0)
             {
 

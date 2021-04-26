@@ -7,6 +7,7 @@ import { Redirect } from "react-router";
 import cookie from "react-cookies";
 import './SignUp.css'
 import Navbar from '../Navbar/Navbar';
+import backendServer from "../../webConfig"
 
 export class SignUp extends Component {
   constructor(props) {
@@ -43,7 +44,7 @@ export class SignUp extends Component {
     axios.defaults.withCredentials = true;
 
     axios
-      .post("http://localhost:3001/api/signup", data)
+      .post(`${backendServer}/signup`, data)
       .then((response) => {
         console.log("Status Code : ", response.status);
         if (response.status === 200) {
