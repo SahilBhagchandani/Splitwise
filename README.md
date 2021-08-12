@@ -11,7 +11,7 @@
 * Open the terminal in the folder "Backend".
 * Execute npm install to install all the dependencies.
 * Update database.js file in "Backend" folder with database name and connection details.
-* Update the app.js file in Backend folder with frontend server's IP address and port.
+* Update the index.js file in Backend folder with frontend server's IP address and port.
 * Execute npm start to run the backend server.
 ## Launch the application
 * Open the browser and navigate to Front end server's IP address with Port number (Eg: localhost:3000) to find the landing page.
